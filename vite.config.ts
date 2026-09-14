@@ -52,6 +52,7 @@ export default defineConfig(async () => {
 
   return {
     server: {
+      open: process.env.CITYWIRE_OPEN_BROWSER === "1",
       ...(managedLinux ? { host: "0.0.0.0", allowedHosts: ["terminal.local"] } : {}),
       ...(isCodexSeatbeltSandbox ? { watch: { useFsEvents: false, usePolling: true } } : {}),
     },

@@ -2,6 +2,10 @@
 
 Indian-city news, events, weather, traffic and embedded live TV. English interface with regional-language broadcasts.
 
+## One-click start on Windows
+
+Double-click **Start Citywire.cmd** in the project root. Install Node.js 22.13 or later first. The launcher installs dependencies if needed, starts the local server, and opens your default browser when ready. Keep its window open while using Citywire; press Ctrl+C to stop it. The first installation and live content need internet access.
+
 ## Run in Windows PowerShell
 
 Use Node.js 22.13 or later. In this folder:
