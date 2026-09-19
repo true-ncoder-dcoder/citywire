@@ -31,3 +31,6 @@ html[data-theme="dark"]{color-scheme:dark;--background:#101c23;--foreground:#e6e
 [data-theme="dark"] .refresh{background:#203e44;color:#b3eedc;border-color:#4f7779}
 @media(max-width:650px){.topbar{gap:10px}.edition{display:none}.theme-toggle{font-size:12px;padding:9px}.topbar .brand{font-size:26px}}
 [data-theme="dark"] :is(.temperature,.weather h3,.forecast strong,.weather svg){color:#d2eee6}[data-theme="dark"] .live-label{background:#24463d;color:#a6e9c3}
+.stream-host,.youtube-host{width:100%;height:100%;position:relative;min-height:inherit}.stream-error{position:absolute;inset:0;background:#102e34;padding:16px;text-align:center;overflow:auto}.stream-error p{max-width:560px;margin:0}.stream-host iframe{aspect-ratio:16/9}
+@media(max-width:650px){.youtube-host:empty{min-height:220px}.stream-host:has(.stream-error){min-height:300px}}
+.tv-player:has(.stream-host){position:relative;aspect-ratio:16/9;min-height:0}.tv-player .stream-host{position:absolute;inset:0;width:100%;height:100%}.stream-host .youtube-host,.tv-player .stream-host iframe{width:100%;height:100%;min-height:0}.tv-player:has(.stream-error){min-height:300px}

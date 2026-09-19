@@ -14,3 +14,11 @@ test('case and whitespace do not prevent regional matching',()=>assert.equal(reg
 test('national filter never returns regional channels',()=>assert.ok(channelsFor({admin1:'Karnataka'},'national').every(c=>c.states.length===0)));
 test('unavailable language never selects an unrelated regional channel',()=>assert.deepEqual(channelsFor({admin1:'West Bengal'},'regional','Marathi'),[]));
 test('all channel configurations use embeds instead of website-only links',()=>assert.ok(channels.every(c=>!c.externalOnly&&c.embed.startsWith('https://'))));
+
+test('English is available nationally for every preset and unknown city',()=>{
+ for(const city of [...cities,{admin1:'Unknown'}]){
+  const english=channelsFor(city,'national','English');
+  assert.ok(english.length>0);
+  assert.ok(english.every(c=>c.language==='English'&&c.states.length===0&&!c.externalOnly));
+ }
+});

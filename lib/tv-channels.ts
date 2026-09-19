@@ -14,6 +14,7 @@ export type NewsChannel = {
 // Official live-player URLs checked against each broadcaster's live-TV page.
 // Empty states means national coverage, not a claim of city-specific programming.
 export const channels: NewsChannel[] = [
+  {id:'india-today',name:'India Today',language:'English',coverage:'India and world',states:[],url:'https://www.indiatoday.in/livetv',embed:'https://www.youtube.com/embed/sYZtOFzM78M?autoplay=1&mute=1&playsinline=1'},
   {id:'abp-ananda',name:'ABP Ananda',language:'Bengali',coverage:'West Bengal, including Kolkata',states:['West Bengal'],url:'https://bengali.abplive.com/live-tv',embed:'https://cdn.abplive.com/LiveStreams/260118/abpananda/streaming_bengali_vidgyor-new-nov2022.html'},
   {id:'abp-majha',name:'ABP Majha',language:'Marathi',coverage:'Maharashtra, including Mumbai and Pune',states:['Maharashtra'],url:'https://marathi.abplive.com/live-tv',embed:'https://cdn.abplive.com/LiveStreams/260118/abpmajha/streaming-new-nov2022.html'},
   {id:'tv9-kannada',name:'TV9 Kannada',language:'Kannada',coverage:'Karnataka',states:['Karnataka'],url:'https://tv9kannada.com/live-tv',embed:'https://static.vidgyor.com/player/account/tv9/html/tv9_v12.html?videoId=737fca26646a1_live&accountId=62c5847bd07d8600094f761f&piv=0&pip=0'},

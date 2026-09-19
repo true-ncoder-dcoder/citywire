@@ -52,3 +52,9 @@ Statewide programming is not city-exclusive news. A city with no listed regional
 Waze map rendering and links work, but completeness of traffic overlays is not guaranteed; an earlier provider GeoRSS request returned HTTP 403.
 
 Production build verification remains blocked by the Windows sandbox's spawn EPERM restriction encountered in earlier build attempts. The development app was tested through the user's running server. No claim of a successful production build or deployment is made.
+
+## English live TV — 14 September 2026
+
+Added India Today via the YouTube embed published on its official /youtube page. The server refreshes the published video ID with a five-minute cache. The /embed-live-tv website player was rejected because it refused third-party framing.
+
+Browser testing on localhost:5173 confirmed the English player displayed Live, a Pause control, and video readyState 4 with paused false. Switching to Bengaluru restored TV9 Kannada as the default; English remained available through its dedicated button. Channel tests cover English availability for all 30 presets and an unknown state while preserving regional/Hindi defaults. Provider availability can change.

@@ -19,7 +19,7 @@ Skip installation if dependencies are already installed. Open the address printe
 
 ## Live TV
 
-Select a city, open Live TV, and click Watch live. Channels play inside the app. Cities with a listed regional source select it automatically; all other cities, including places found through search, default to embedded Hindi ABP News. The Switch to Hindi button also works during a regional broadcast. National channels now contains Hindi; former website-only English options have been removed.
+Select a city, open Live TV, and click Watch live. Channels play inside the app. Cities with a listed regional source select it automatically; all other cities, including places found through search, default to embedded Hindi ABP News. The Switch to Hindi button also works during a regional broadcast. Choose English live news to play India Today inside the app from any city. National channels includes English and Hindi, with a language filter. Regional channels remain the default where available.
 
 | State / coverage | Language | Broadcaster |
 |---|---|---|
@@ -32,9 +32,10 @@ Select a city, open Live TV, and click Watch live. Channels play inside the app.
 | Odisha | Odia | [OTV](https://odishatv.in/live-tv) |
 | Assam | Assamese | [News Live](https://newslivetv.com/live-tv/) |
 | Tamil Nadu, Puducherry | Tamil | [Puthiya Thalaimurai](https://www.puthiyathalaimurai.com/live-tv) |
+| National | English | [India Today](https://www.indiatoday.in/livetv) |
 | National / fallback | Hindi | [ABP News](https://www.abplive.com/live-tv) |
 
-These are statewide or national channels, not city-exclusive broadcasts. Broadcasters control programming, advertisements, controls and availability. No broadcasts are proxied and ads are not removed. The Tamil source resolves the broadcaster's current published video ID on playback and caches it for five minutes. If that source lookup fails, the app switches to Hindi. A cross-origin player can still fail independently; use Reload player or Switch to Hindi if playback stalls.
+These are statewide or national channels, not city-exclusive broadcasts. Broadcasters control programming, advertisements, controls and availability. No broadcasts are proxied and ads are not removed. The Tamil and English sources fetch the broadcaster's current published video ID on every start or retry. Their YouTube players report playback, buffering, paused, autoplay-blocked and error states. A failed lookup or player error offers Retry broadcast and an explicit Hindi fallback; it does not silently change the language. Other official cross-origin players control their own error messages. Use Reload player or Switch to Hindi if playback stalls.
 
 ## Appearance
 
@@ -50,6 +51,7 @@ No paid API keys are required. Provider commercial-use rules still apply, includ
 
 ```powershell
 node --experimental-strip-types tests/tv-channels.test.mjs
+node --experimental-strip-types tests/tv-source.test.mjs
 node tests/api-smoke.mjs
 node node_modules/typescript/bin/tsc --noEmit
 ```
