@@ -1,8 +1,13 @@
-function decode(s:string){return s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1').replace(/&#(x[\da-f]+|\d+);/gi,(_,v)=>{const n=v[0].toLowerCase()==='x'?parseInt(v.slice(1),16):Number(v);return n>0&&n<=0x10ffff?String.fromCodePoint(n):''}).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&')}
-function tag(s:string,t:string){return decode(s.match(new RegExp('<'+t+'(?:\\s[^>]*)?>([\\s\\S]*?)</'+t+'>'))?.[1]||'')}
+import {publisherFeeds,readFeed,parseFeed,mergeStories,type FeedSource} from '../../../lib/news-feeds';
 export async function GET(request:Request){
  const p=new URL(request.url).searchParams,city=p.get('city')?.trim()||'',category=p.get('category')||'news',region=p.get('region')?.trim()||'';
  if(region.length>80||/[^\p{L}\p{M}\s.'-]/u.test(region)||!/^[\p{L}\p{M}\s.'-]{2,80}$/u.test(city)||!['news','events','traffic'].includes(category))return Response.json({error:'Invalid city or category'},{status:400});
  const extra=category==='events'?'(festival OR concert OR exhibition OR theatre OR "things to do") when:7d':category==='traffic'?'(traffic OR diversion OR "road closure" OR "traffic advisory") when:2d':'when:2d';
- try{const r=await fetch('https://news.google.com/rss/search?'+new URLSearchParams({q:'"'+city+'" '+region+' India '+extra,hl:'en-IN',gl:'IN',ceid:'IN:en'}),{signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error();const xml=await r.text();if(!xml.includes('<rss'))throw Error();const seen=new Set<string>();const days=category==='events'?7:2;const items=[...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m=>{const s=m[1],source=tag(s,'source'),raw=tag(s,'title');return {title:raw.endsWith(' - '+source)?raw.slice(0,-source.length-3):raw,url:tag(s,'link'),source,date:tag(s,'pubDate')}}).filter(s=>{let d=Date.parse(s.date);if(category==='traffic'&&!/traffic|road|highway|commut|congestion|diversion|flyover|expressway|metro|rail|bridge/i.test(s.title))return false;if(!s.title||!s.source||!/^https:\/\/news\.google\.com\//.test(s.url)||!Number.isFinite(d)||d<Date.now()-days*86400000||d>Date.now()+3600000||seen.has(s.title))return false;seen.add(s.title);return true}).sort((a,b)=>Number(b.title.toLowerCase().includes(city.toLowerCase()))-Number(a.title.toLowerCase().includes(city.toLowerCase()))||Date.parse(b.date)-Date.parse(a.date)).slice(0,24);return Response.json({items,updated:new Date().toISOString()},{headers:{'Cache-Control':'public, max-age=300'}})}catch{return Response.json({error:'News source unavailable'},{status:502})}
+ const google:FeedSource={name:'Google News',host:'news.google.com',aggregated:true,url:'https://news.google.com/rss/search?'+new URLSearchParams({q:'"'+city+'" '+region+' India '+extra,hl:'en-IN',gl:'IN',ceid:'IN:en'})};
+ const feeds=[google,...publisherFeeds];
+ const results=await Promise.allSettled(feeds.map(async feed=>parseFeed(await readFeed(feed),feed,city)));
+ if(results.every(r=>r.status==='rejected'))return Response.json({error:'News sources unavailable'},{status:502});
+ const unavailableSources=feeds.filter((_,i)=>results[i].status==='rejected').map(f=>f.name);
+ const items=mergeStories(results.flatMap(r=>r.status==='fulfilled'?r.value:[]),category);
+ return Response.json({items,updated:new Date().toISOString(),unavailableSources},{headers:{'Cache-Control':'public, max-age=300'}});
 }

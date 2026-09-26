@@ -43,7 +43,7 @@ Use the Light mode / Dark mode switch in the header. The choice persists across 
 
 ## Other live data
 
-News and traffic reports use English Google News RSS. Open-Meteo supplies weather and Indian-city search. AllEvents supplies upcoming dates, venues and ticket links; prices appear only when provided. BookMyShow is a separate event-discovery link. Waze supplies the map; overlays can be incomplete, so Google Maps traffic is also linked prominently. No fabricated fallback records are used.
+News and traffic reports combine English Google News RSS with direct feeds from The Hindu, Hindustan Times and The Times of India. Direct feed items are filtered by city (including common old city names), merged, deduplicated, and sorted strictly newest first using publication timestamps. Invalid, future, and out-of-window timestamps are excluded. Up to 40 items are displayed; publisher coverage varies, particularly for smaller cities. A failed provider does not block other feeds, and partial failures are shown in the interface. Open-Meteo supplies weather and Indian-city search. AllEvents supplies upcoming dates, venues and ticket links; prices appear only when provided. BookMyShow is a separate event-discovery link. Waze supplies the map; overlays can be incomplete, so Google Maps traffic is also linked prominently. No fabricated fallback records are used.
 
 No paid API keys are required. Provider commercial-use rules still apply, including Open-Meteo's public API restriction to non-commercial use. Event listings are organiser submitted; confirm details before booking.
 
@@ -52,6 +52,9 @@ No paid API keys are required. Provider commercial-use rules still apply, includ
 ```powershell
 node --experimental-strip-types tests/tv-channels.test.mjs
 node --experimental-strip-types tests/tv-source.test.mjs
+node --experimental-strip-types tests/youtube-player.test.mjs
+node --experimental-strip-types tests/news-feeds.test.mjs
+node --experimental-strip-types tests/news-live-smoke.mjs
 node tests/api-smoke.mjs
 node node_modules/typescript/bin/tsc --noEmit
 ```
